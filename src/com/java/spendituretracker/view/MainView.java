@@ -5,6 +5,7 @@
  */
 package com.java.spendituretracker.view;
 
+import com.java.spendituretracker.view.summary.SummaryView;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -21,13 +22,13 @@ public class MainView extends javax.swing.JFrame {
      */
     public MainView() {
         initComponents();
+        LoadSummaryView();
     }
     
     private  void LoadSummaryView(){
         summaryView = new SummaryView();
-        summaryView.setBackground(Color.red);
         summaryView.setBounds(0,0,mainContainer.getWidth(), mainContainer.getHeight());
-        summaryView.setPreferredSize(new Dimension(200,40));
+        //summaryView.setPreferredSize(new Dimension(100,100));
         this.mainContainer.add(summaryView);
     }
 
