@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public class Income {
     
-    private long expenditureId;
+    private long incomeId;
     
     private double amount;
     
@@ -22,12 +22,12 @@ public class Income {
     
     private Date date;
 
-    public long getExpenditureId() {
-        return expenditureId;
+    public long getIncomeId() {
+        return incomeId;
     }
 
-    public void setExpenditureId(long expenditureId) {
-        this.expenditureId = expenditureId;
+    public void setIncomeId(long expenditureId) {
+        this.incomeId = expenditureId;
     }
 
     public double getAmount() {
