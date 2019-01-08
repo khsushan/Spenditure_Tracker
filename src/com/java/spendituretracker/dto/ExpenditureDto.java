@@ -5,10 +5,54 @@
  */
 package com.java.spendituretracker.dto;
 
+import java.util.Date;
+
 /**
  *
  * @author Calcey
  */
 public class ExpenditureDto {
+    
+    private long expenditureId;
+    
+    private double amount;
+    
+    private long categoryId;
+    
+    private Date date;
+
+    public long getExpenditureId() {
+        return expenditureId;
+    }
+
+    public void setExpenditureId(long expenditureId) {
+        this.expenditureId = expenditureId;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(long categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    
+    
     
 }

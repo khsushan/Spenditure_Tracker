@@ -5,10 +5,15 @@
  */
 package com.java.spendituretracker.controller.inf;
 
+import com.java.spendituretracker.dto.ExpenditureDto;
+import java.sql.SQLException;
+
 /**
  *
  * @author Calcey
  */
 public interface ExpenditureControllerInf {
+    
+    int addExpenditure(ExpenditureDto expenditureDto) throws SQLException, ClassNotFoundException;
     
 }

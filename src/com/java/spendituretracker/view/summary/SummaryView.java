@@ -5,17 +5,30 @@
  */
 package com.java.spendituretracker.view.summary;
 
+import com.java.spendituretracker.controller.ExpenditureController;
+import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
+import com.java.spendituretracker.dto.ExpenditureDto;
+import com.java.spendituretracker.view.expenditure.AddExpenditureView;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Calcey
  */
 public class SummaryView extends javax.swing.JPanel {
-
+    
+    private ExpenditureControllerInf expenditureControllerInf;
     /**
      * Creates new form SummaryView
      */
     public SummaryView() {
         initComponents();
+        expenditureControllerInf = new ExpenditureController();
     }
 
     /**
@@ -38,9 +51,9 @@ public class SummaryView extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         incomeBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        expensesBtn = new javax.swing.JButton();
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(0));
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel1.setText("Income       : ");
 
@@ -116,10 +129,10 @@ public class SummaryView extends javax.swing.JPanel {
             }
         });
 
-        jButton2.setText("Expenses");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        expensesBtn.setText("Expenses");
+        expensesBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                expensesBtnActionPerformed(evt);
             }
         });
 
@@ -135,7 +148,7 @@ public class SummaryView extends javax.swing.JPanel {
                 .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(expensesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(incomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(282, 282, 282))
@@ -150,7 +163,7 @@ public class SummaryView extends javax.swing.JPanel {
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(incomeBtn)
-                    .addComponent(jButton2))
+                    .addComponent(expensesBtn))
                 .addContainerGap(59, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -159,14 +172,15 @@ public class SummaryView extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_incomeBtnActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void expensesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expensesBtnActionPerformed
+        AddExpenditureView addExpenditureView = new AddExpenditureView(null, true);
+        addExpenditureView.setVisible(true);
+    }//GEN-LAST:event_expensesBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton expensesBtn;
     private javax.swing.JButton incomeBtn;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

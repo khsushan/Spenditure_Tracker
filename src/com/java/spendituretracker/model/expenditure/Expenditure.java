@@ -5,7 +5,10 @@
  */
 package com.java.spendituretracker.model.expenditure;
 
+import com.java.spendituretracker.dbconnection.DBConnection;
 import com.java.spendituretracker.model.category.Category;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -52,6 +55,16 @@ public class Expenditure {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+    
+    public int AddExpenditure() throws SQLException, ClassNotFoundException{
+        
+        String query = "INSERT INTO EXPENDITURE(Amount,Date,CategoryId) VALUES(?,?,?)";
+        PreparedStatement preparedStatement  =  DBConnection.GetConnection().prepareStatement(query);
+        preparedStatement.setDouble(1, this.getAmount());
+        preparedStatement.setDate(2, (java.sql.Date) this.getDate());
+        preparedStatement.setLong(3, this.getCategory().getCategoryId());
+        return preparedStatement.executeUpdate();        
     }
     
 }
