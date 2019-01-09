@@ -5,6 +5,7 @@
  */
 package com.java.spendituretracker.controller;
 
+import com.java.spendituretracker.common.ModelMapperConfigurartion;
 import com.java.spendituretracker.controller.inf.CategoryControllerInf;
 import com.java.spendituretracker.dto.CategoryDto;
 import com.java.spendituretracker.model.category.Category;
@@ -25,7 +26,7 @@ public class CategoryController implements  CategoryControllerInf{
 
     public CategoryController() {
         category = new Category();
-        modelMapper = new ModelMapper();
+        modelMapper = ModelMapperConfigurartion.getModelMapper();
     }
 
     public ArrayList<CategoryDto> GetAllCategories() throws ClassNotFoundException, SQLException {

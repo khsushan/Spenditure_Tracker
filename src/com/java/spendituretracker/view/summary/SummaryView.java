@@ -7,28 +7,49 @@ package com.java.spendituretracker.view.summary;
 
 import com.java.spendituretracker.controller.ExpenditureController;
 import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
-import com.java.spendituretracker.dto.ExpenditureDto;
+import com.java.spendituretracker.dto.ExpenditureListDto;
 import com.java.spendituretracker.view.expenditure.AddExpenditureView;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Calcey
  */
 public class SummaryView extends javax.swing.JPanel {
-    
+
     private ExpenditureControllerInf expenditureControllerInf;
+
     /**
      * Creates new form SummaryView
      */
     public SummaryView() {
         initComponents();
+        
+    }
+    
+    public SummaryView(int month){
+        this();
         expenditureControllerInf = new ExpenditureController();
+        loadExpneditures(month);
+    }
+
+    
+
+    private void loadExpneditures(int month) {
+        try {
+            ArrayList<ExpenditureListDto> expendituresByMonth = expenditureControllerInf.getExpendituresByMonth(month);
+            DefaultTableModel model = (DefaultTableModel) expenditureSummaryTable.getModel();
+            model.setNumRows(0);
+            for(ExpenditureListDto expenditureListDto :  expendituresByMonth){
+                model.addRow(new Object[]{expenditureListDto.categoryName, expenditureListDto.amount});
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(SummaryView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -49,7 +70,7 @@ public class SummaryView extends javax.swing.JPanel {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        expenditureSummaryTable = new javax.swing.JTable();
         incomeBtn = new javax.swing.JButton();
         expensesBtn = new javax.swing.JButton();
 
@@ -102,7 +123,7 @@ public class SummaryView extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        expenditureSummaryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -118,9 +139,9 @@ public class SummaryView extends javax.swing.JPanel {
                 return types [columnIndex];
             }
         });
-        jTable1.setShowHorizontalLines(false);
-        jTable1.setShowVerticalLines(false);
-        jScrollPane1.setViewportView(jTable1);
+        expenditureSummaryTable.setShowHorizontalLines(false);
+        expenditureSummaryTable.setShowVerticalLines(false);
+        jScrollPane1.setViewportView(expenditureSummaryTable);
 
         incomeBtn.setText("Income");
         incomeBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -179,6 +200,7 @@ public class SummaryView extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable expenditureSummaryTable;
     private javax.swing.JButton expensesBtn;
     private javax.swing.JButton incomeBtn;
     private javax.swing.JLabel jLabel1;
@@ -189,7 +211,6 @@ public class SummaryView extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private java.awt.List list1;
     // End of variables declaration//GEN-END:variables
 }

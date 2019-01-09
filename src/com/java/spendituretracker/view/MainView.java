@@ -22,13 +22,13 @@ public class MainView extends javax.swing.JFrame {
      */
     public MainView() {
         initComponents();
-        LoadSummaryView();
+        LoadSummaryView(1);
     }
     
-    private  void LoadSummaryView(){
-        summaryView = new SummaryView();
+    private  void LoadSummaryView(int month){
+        
+        summaryView = new SummaryView(month);
         summaryView.setBounds(0,0,mainContainer.getWidth(), mainContainer.getHeight());
-        //summaryView.setPreferredSize(new Dimension(100,100));
         this.mainContainer.add(summaryView);
     }
 
@@ -43,7 +43,7 @@ public class MainView extends javax.swing.JFrame {
 
         jTabbedPane5 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        monthNameCmb = new javax.swing.JComboBox<>();
         mainSummaryScorllPanel = new javax.swing.JScrollPane();
         mainContainer = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
@@ -51,7 +51,12 @@ public class MainView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
+        monthNameCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
+        monthNameCmb.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                monthNameCmbItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout mainContainerLayout = new javax.swing.GroupLayout(mainContainer);
         mainContainer.setLayout(mainContainerLayout);
@@ -72,7 +77,7 @@ public class MainView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(353, 353, 353)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(monthNameCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(mainSummaryScorllPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
         );
@@ -80,7 +85,7 @@ public class MainView extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(monthNameCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(mainSummaryScorllPanel))
         );
@@ -127,14 +132,23 @@ public class MainView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void monthNameCmbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_monthNameCmbItemStateChanged
+        if(summaryView != null){
+            this.mainContainer.remove(summaryView);
+            this.mainContainer.revalidate();
+            this.mainContainer.repaint();                    
+        }        
+        LoadSummaryView(monthNameCmb.getSelectedIndex()+1);
+    }//GEN-LAST:event_monthNameCmbItemStateChanged
+
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane5;
     private javax.swing.JPanel mainContainer;
     private javax.swing.JScrollPane mainSummaryScorllPanel;
+    private javax.swing.JComboBox<String> monthNameCmb;
     // End of variables declaration//GEN-END:variables
 }
