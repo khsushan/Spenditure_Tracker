@@ -5,14 +5,21 @@
  */
 package com.java.spendituretracker.model.category;
 
+import com.java.spendituretracker.dbconnection.DBConnection;
+import java.awt.List;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
 /**
  *
  * @author Calcey
  */
 public class Category {
-    
+
     private long categoryId;
-    
+
     private String categoryName;
 
     public void setCategoryId(long categoryId) {
@@ -30,8 +37,18 @@ public class Category {
     public String getCategoryName() {
         return categoryName;
     }
-    
-    
-    
-    
+
+    public ArrayList<Category> GetAllCategories() throws SQLException, ClassNotFoundException {
+        ArrayList<Category> categories = new ArrayList<>();
+        String sql = "SELECT * FROM Category";
+        Statement statement = DBConnection.GetConnection().createStatement();
+        ResultSet result = statement.executeQuery(sql);
+        while (result.next()) {
+            Category category = new Category();
+            category.categoryId = result.getInt("CategoryId");
+            category.categoryName = result.getString("CategoryName");
+            categories.add(category);
+        }        
+        return categories;
+    }
 }

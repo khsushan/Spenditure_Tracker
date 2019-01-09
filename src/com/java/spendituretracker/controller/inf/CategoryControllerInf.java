@@ -5,10 +5,16 @@
  */
 package com.java.spendituretracker.controller.inf;
 
+import com.java.spendituretracker.dto.CategoryDto;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 /**
  *
  * @author Calcey
  */
 public interface CategoryControllerInf {
-    
+
+    ArrayList<CategoryDto> GetAllCategories() throws ClassNotFoundException, SQLException;
+
 }

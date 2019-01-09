@@ -5,21 +5,28 @@
  */
 package com.java.spendituretracker.view.expenditure;
 
+import com.java.spendituretracker.controller.CategoryController;
 import com.java.spendituretracker.controller.ExpenditureController;
+import com.java.spendituretracker.controller.inf.CategoryControllerInf;
 import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
+import com.java.spendituretracker.dto.CategoryDto;
 import com.java.spendituretracker.dto.ExpenditureDto;
 import com.java.spendituretracker.view.summary.SummaryView;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 
 /**
  *
  * @author Calcey
  */
 public class AddExpenditureView extends javax.swing.JDialog {
-    
+
     private ExpenditureControllerInf expenditureControllerInf;
+    private CategoryControllerInf categoryControllerInf;
 
     /**
      * Creates new form AddExpenditureView
@@ -27,7 +34,11 @@ public class AddExpenditureView extends javax.swing.JDialog {
     public AddExpenditureView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setTitle("Add New Expenditure");
         expenditureControllerInf = new ExpenditureController();
+        categoryControllerInf = new CategoryController();
+        loadCategories();
+
     }
 
     /**
@@ -44,7 +55,7 @@ public class AddExpenditureView extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         ammountTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        categoryCmb = new javax.swing.JComboBox<>();
         saveBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -82,7 +93,7 @@ public class AddExpenditureView extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(datePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
                     .addComponent(ammountTxt)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(categoryCmb, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(47, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -103,7 +114,7 @@ public class AddExpenditureView extends javax.swing.JDialog {
                 .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(categoryCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
                 .addComponent(saveBtn)
                 .addGap(23, 23, 23))
@@ -118,7 +129,7 @@ public class AddExpenditureView extends javax.swing.JDialog {
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
         ExpenditureDto expenditureDto = new ExpenditureDto();
-        expenditureDto.setCategoryId(2);
+        expenditureDto.setCategoryId(((CategoryDto)categoryCmb.getSelectedItem()).getCategoryId());
         expenditureDto.setAmount(Double.parseDouble(ammountTxt.getText()));
         expenditureDto.setDate(new java.sql.Date(datePicker.getDate().getTime()));
         try {
@@ -130,52 +141,21 @@ public class AddExpenditureView extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_saveBtnActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddExpenditureView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddExpenditureView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddExpenditureView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddExpenditureView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                AddExpenditureView dialog = new AddExpenditureView(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
+    private void loadCategories() {
+        try {
+            Vector<CategoryDto> list = new Vector<>(categoryControllerInf.GetAllCategories());
+            final DefaultComboBoxModel model = new DefaultComboBoxModel(list);
+            categoryCmb.setModel(model);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(AddExpenditureView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ammountTxt;
+    private javax.swing.JComboBox<String> categoryCmb;
     private org.jdesktop.swingx.JXDatePicker datePicker;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

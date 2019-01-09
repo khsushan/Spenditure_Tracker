@@ -18,7 +18,7 @@ import org.modelmapper.ModelMapper;
 public class ExpenditureController implements ExpenditureControllerInf{
   
     private Expenditure expenditure;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
     
     public ExpenditureController()
     {
@@ -26,6 +26,7 @@ public class ExpenditureController implements ExpenditureControllerInf{
         modelMapper = new ModelMapper();
     }
     
+    @Override
     public int addExpenditure(ExpenditureDto expenditureDto) throws SQLException, ClassNotFoundException{
        expenditure =  modelMapper.map(expenditureDto, Expenditure.class);
        return expenditure.AddExpenditure();
