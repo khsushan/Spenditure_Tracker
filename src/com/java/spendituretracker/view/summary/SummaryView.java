@@ -10,6 +10,8 @@ import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
 import com.java.spendituretracker.dto.ExpenditureListDto;
 import com.java.spendituretracker.view.expenditure.AddExpenditureView;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,31 +24,32 @@ import javax.swing.table.DefaultTableModel;
 public class SummaryView extends javax.swing.JPanel {
 
     private ExpenditureControllerInf expenditureControllerInf;
+    private DecimalFormat formatter;
 
     /**
      * Creates new form SummaryView
      */
     public SummaryView() {
         initComponents();
-        
+        formatter = new DecimalFormat(".##");
     }
-    
-    public SummaryView(int month){
+
+    public SummaryView(int month) {
         this();
         expenditureControllerInf = new ExpenditureController();
         loadExpneditures(month);
     }
-
-    
 
     private void loadExpneditures(int month) {
         try {
             ArrayList<ExpenditureListDto> expendituresByMonth = expenditureControllerInf.getExpendituresByMonth(month);
             DefaultTableModel model = (DefaultTableModel) expenditureSummaryTable.getModel();
             model.setNumRows(0);
-            for(ExpenditureListDto expenditureListDto :  expendituresByMonth){
-                model.addRow(new Object[]{expenditureListDto.categoryName, expenditureListDto.amount});
-            }
+            System.out.println("==========="+formatter.format(1));
+            expendituresByMonth.forEach((expenditureListDto) -> {
+                model.addRow(new Object[]{expenditureListDto.getCategoryName(),
+                   expenditureListDto.getAmount()});
+            });
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SummaryView.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -73,6 +76,7 @@ public class SummaryView extends javax.swing.JPanel {
         expenditureSummaryTable = new javax.swing.JTable();
         incomeBtn = new javax.swing.JButton();
         expensesBtn = new javax.swing.JButton();
+        progressBar = new javax.swing.JProgressBar();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -161,27 +165,34 @@ public class SummaryView extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(expensesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(incomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(282, 282, 282))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(182, 182, 182)
+                        .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(incomeBtn)
                     .addComponent(expensesBtn))
@@ -212,5 +223,6 @@ public class SummaryView extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.List list1;
+    private javax.swing.JProgressBar progressBar;
     // End of variables declaration//GEN-END:variables
 }

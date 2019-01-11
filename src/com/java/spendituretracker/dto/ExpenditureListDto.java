@@ -11,9 +11,9 @@ package com.java.spendituretracker.dto;
  */
 public class ExpenditureListDto {
     
-    public double amount;
+    private double amount;
     
-    public String categoryName;
+    private String categoryName;
 
     public double getAmount() {
         return amount;

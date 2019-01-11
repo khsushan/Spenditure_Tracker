@@ -6,8 +6,6 @@
 package com.java.spendituretracker.view;
 
 import com.java.spendituretracker.view.summary.SummaryView;
-import java.awt.Color;
-import java.awt.Dimension;
 
 /**
  *
