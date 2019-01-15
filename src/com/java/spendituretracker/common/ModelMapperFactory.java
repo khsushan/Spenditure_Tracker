@@ -14,7 +14,7 @@ import org.modelmapper.PropertyMap;
  *
  * @author Calcey
  */
-public final class ModelMapperConfigurartion {
+public final class ModelMapperFactory {
     
     private static ModelMapper modelMapper;
     

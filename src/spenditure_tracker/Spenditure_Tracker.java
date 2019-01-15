@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
@@ -23,10 +25,9 @@ public class Spenditure_Tracker {
      */
     public static void main(String[] args) {
         try {
-            Connection connection = DBConnection.GetConnection();
-        } catch (SQLException ex) {
-            Logger.getLogger(Spenditure_Tracker.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+                UIManager.setLookAndFeel(
+            UIManager.getCrossPlatformLookAndFeelClassName());
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Spenditure_Tracker.class.getName()).log(Level.SEVERE, null, ex);
         }
        java.awt.EventQueue.invokeLater(() -> {

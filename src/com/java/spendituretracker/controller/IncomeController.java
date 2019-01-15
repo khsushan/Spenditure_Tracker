@@ -5,12 +5,28 @@
  */
 package com.java.spendituretracker.controller;
 
+import com.java.spendituretracker.common.ModelMapperFactory;
 import com.java.spendituretracker.controller.inf.IncomeControllerInf;
+import com.java.spendituretracker.model.income.Income;
+import java.sql.SQLException;
+import org.modelmapper.ModelMapper;
 
 /**
  *
  * @author Calcey
  */
 public class IncomeController implements  IncomeControllerInf{
+    
+    private Income income;
+    private final ModelMapper modelMapper;
+
+    public IncomeController(){
+        modelMapper = ModelMapperFactory.getModelMapper();
+        income = new Income();
+    }
+    
+    public double getTotalIncomeByMonth(int month) throws SQLException, ClassNotFoundException{
+       return income.getIncomeByMonth(month);
+    }
     
 }

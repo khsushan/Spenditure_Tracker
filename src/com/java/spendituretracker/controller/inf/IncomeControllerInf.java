@@ -5,10 +5,14 @@
  */
 package com.java.spendituretracker.controller.inf;
 
+import java.sql.SQLException;
+
 /**
  *
  * @author Calcey
  */
 public interface IncomeControllerInf {
+    
+    double getTotalIncomeByMonth(int month) throws SQLException, ClassNotFoundException;
     
 }

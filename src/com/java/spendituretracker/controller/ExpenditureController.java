@@ -5,7 +5,7 @@
  */
 package com.java.spendituretracker.controller;
 
-import com.java.spendituretracker.common.ModelMapperConfigurartion;
+import com.java.spendituretracker.common.ModelMapperFactory;
 import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
 import com.java.spendituretracker.dto.ExpenditureDto;
 import com.java.spendituretracker.dto.ExpenditureListDto;
@@ -28,7 +28,7 @@ public class ExpenditureController implements ExpenditureControllerInf {
 
     public ExpenditureController() {
         expenditure = new Expenditure();
-        modelMapper = ModelMapperConfigurartion.getModelMapper();
+        modelMapper = ModelMapperFactory.getModelMapper();
     }
 
     @Override

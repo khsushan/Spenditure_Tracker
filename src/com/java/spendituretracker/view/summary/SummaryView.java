@@ -5,17 +5,24 @@
  */
 package com.java.spendituretracker.view.summary;
 
+import com.java.spendituretracker.common.Formatter;
 import com.java.spendituretracker.controller.ExpenditureController;
+import com.java.spendituretracker.controller.IncomeController;
 import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
+import com.java.spendituretracker.controller.inf.IncomeControllerInf;
 import com.java.spendituretracker.dto.ExpenditureListDto;
 import com.java.spendituretracker.view.expenditure.AddExpenditureView;
+import java.awt.Color;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -24,35 +31,77 @@ import javax.swing.table.DefaultTableModel;
 public class SummaryView extends javax.swing.JPanel {
 
     private ExpenditureControllerInf expenditureControllerInf;
-    private DecimalFormat formatter;
+    private IncomeControllerInf incomeControllerInf;
 
     /**
      * Creates new form SummaryView
      */
     public SummaryView() {
         initComponents();
-        formatter = new DecimalFormat(".##");
+        DefaultTableCellRenderer tableCellRenderer = new DefaultTableCellRenderer();
+        tableCellRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
+        TableColumn tableColumn = expenditureSummaryTable.getColumnModel().getColumn(1);
+        expenditureSummaryTable.setBackground(UIManager.getColor(new JTableHeader().getBackground()));
+        tableColumn.setCellRenderer(tableCellRenderer);
     }
 
     public SummaryView(int month) {
         this();
         expenditureControllerInf = new ExpenditureController();
-        loadExpneditures(month);
+        incomeControllerInf = new IncomeController();
+        double expensesTotal = loadExpneditures(month);
+        double incomeTotal = getIncomeByMonth(month);
+        calculateTotal(expensesTotal, incomeTotal);
+        initializeProgressBar(expensesTotal, incomeTotal);
     }
 
-    private void loadExpneditures(int month) {
+    private double loadExpneditures(int month) {
+        double total = 0.00;
         try {
             ArrayList<ExpenditureListDto> expendituresByMonth = expenditureControllerInf.getExpendituresByMonth(month);
             DefaultTableModel model = (DefaultTableModel) expenditureSummaryTable.getModel();
             model.setNumRows(0);
-            System.out.println("==========="+formatter.format(1));
-            expendituresByMonth.forEach((expenditureListDto) -> {
+            total = expendituresByMonth.stream().map((expenditureListDto) -> {
                 model.addRow(new Object[]{expenditureListDto.getCategoryName(),
-                   expenditureListDto.getAmount()});
-            });
+                    Formatter.currencyFormat(expenditureListDto.getAmount())});
+                return expenditureListDto;
+            }).map((expenditureListDto) -> expenditureListDto.getAmount()).reduce(total, (accumulator, _item) -> accumulator + _item);
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(SummaryView.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return total;
+    }
+
+    private double getIncomeByMonth(int month) {
+        try {
+            return incomeControllerInf.getTotalIncomeByMonth(month);
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(SummaryView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    private void calculateTotal(double expensesTotal, double incomeTotal) {
+        expenditureLbl.setText(Formatter.currencyFormat(expensesTotal));
+        expenditureLbl.setForeground(Color.red);
+        incomeLbl.setText(Formatter.currencyFormat(incomeTotal));
+        incomeLbl.setForeground(Color.GREEN);
+        balanceLbl.setText(Formatter.currencyFormat(incomeTotal - expensesTotal));
+        balanceLbl.setForeground(Color.blue);
+    }
+
+    private void initializeProgressBar(double expensesTotal, double incomeTotal) {
+
+        if (incomeTotal > 0 || expensesTotal > 0) {
+            progressBar.setForeground(Color.GREEN);
+            progressBar.setBackground(Color.RED);
+            progressBar.setMinimum(0);
+            progressBar.setMaximum(100);
+            progressBar.setValue(20);
+            double incomeTotalValue = incomeTotal / (expensesTotal + incomeTotal) * 100;
+            progressBar.setValue((int) incomeTotalValue);
+        }
+
     }
 
     /**
@@ -69,9 +118,9 @@ public class SummaryView extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        incomeLbl = new javax.swing.JLabel();
+        balanceLbl = new javax.swing.JLabel();
+        expenditureLbl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         expenditureSummaryTable = new javax.swing.JTable();
         incomeBtn = new javax.swing.JButton();
@@ -80,17 +129,26 @@ public class SummaryView extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel1.setText("Income       : ");
+        jLabel1.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel1.setText("Income         : ");
 
+        jLabel2.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel2.setText("Expenditure :");
 
-        jLabel3.setText("Balance      :");
+        jLabel3.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        jLabel3.setText("Balance         :");
 
-        jLabel4.setText("0.00");
+        incomeLbl.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        incomeLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        incomeLbl.setText("0.00");
 
-        jLabel5.setText("0.00");
+        balanceLbl.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        balanceLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        balanceLbl.setText("0.00");
 
-        jLabel6.setText("0.00");
+        expenditureLbl.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        expenditureLbl.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        expenditureLbl.setText("0.00");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -99,15 +157,16 @@ public class SummaryView extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(147, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(expenditureLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(balanceLbl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(incomeLbl, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE))
+                .addContainerGap(299, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,18 +174,19 @@ public class SummaryView extends javax.swing.JPanel {
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jLabel4))
+                    .addComponent(incomeLbl))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel6))
+                    .addComponent(expenditureLbl))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel5))
+                    .addComponent(balanceLbl))
                 .addContainerGap())
         );
 
+        expenditureSummaryTable.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         expenditureSummaryTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -136,11 +196,18 @@ public class SummaryView extends javax.swing.JPanel {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Double.class
+                java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         expenditureSummaryTable.setShowHorizontalLines(false);
@@ -181,7 +248,7 @@ public class SummaryView extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(182, 182, 182)
                         .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 356, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +263,7 @@ public class SummaryView extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(incomeBtn)
                     .addComponent(expensesBtn))
-                .addContainerGap(59, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -211,15 +278,15 @@ public class SummaryView extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel balanceLbl;
+    private javax.swing.JLabel expenditureLbl;
     private javax.swing.JTable expenditureSummaryTable;
     private javax.swing.JButton expensesBtn;
     private javax.swing.JButton incomeBtn;
+    private javax.swing.JLabel incomeLbl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.List list1;

@@ -5,7 +5,11 @@
  */
 package com.java.spendituretracker.model.income;
 
+import com.java.spendituretracker.dbconnection.DBConnection;
 import com.java.spendituretracker.model.category.Category;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
 
 /**
@@ -52,5 +56,21 @@ public class Income {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+    
+     public double getIncomeByMonth(int month) throws SQLException, ClassNotFoundException {
+        String query = "SELECT sum(Amount) as Total FROM income as I "
+                + "WHERE MONTH(I.Date) = ? ";
+        PreparedStatement preparedStatement = DBConnection.GetConnection().prepareStatement(query);
+        preparedStatement.setInt(1, month);
+        try {
+            ResultSet result = preparedStatement.executeQuery();
+            if(result.next()){
+              return result.getDouble("Total");
+            }
+            return 0;
+        } finally {
+            preparedStatement.close();
+        }
     }
 }
