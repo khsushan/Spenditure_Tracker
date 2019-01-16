@@ -12,12 +12,14 @@ import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
 import com.java.spendituretracker.controller.inf.IncomeControllerInf;
 import com.java.spendituretracker.dto.ExpenditureListDto;
 import com.java.spendituretracker.view.expenditure.AddExpenditureView;
+import com.java.spendituretracker.view.expenditure.DisplayStatisticsView;
 import com.java.spendituretracker.view.income.AddIncomeView;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -129,6 +131,7 @@ public class SummaryView extends javax.swing.JPanel {
         incomeBtn = new javax.swing.JButton();
         expensesBtn = new javax.swing.JButton();
         progressBar = new javax.swing.JProgressBar();
+        statisticsBtn = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -160,9 +163,8 @@ public class SummaryView extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -231,6 +233,14 @@ public class SummaryView extends javax.swing.JPanel {
             }
         });
 
+        statisticsBtn.setText("Statistics");
+        statisticsBtn.setToolTipText("");
+        statisticsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                statisticsBtnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -240,7 +250,9 @@ public class SummaryView extends javax.swing.JPanel {
                 .addComponent(expensesBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(incomeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(282, 282, 282))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(statisticsBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(161, 161, 161))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -265,7 +277,8 @@ public class SummaryView extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(incomeBtn)
-                    .addComponent(expensesBtn))
+                    .addComponent(expensesBtn)
+                    .addComponent(statisticsBtn))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -282,7 +295,13 @@ public class SummaryView extends javax.swing.JPanel {
         calculateTotal(this.month);
     }//GEN-LAST:event_expensesBtnActionPerformed
 
-
+    private void statisticsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statisticsBtnActionPerformed
+    
+        DisplayStatisticsView d = new DisplayStatisticsView(this.month);
+        d.setLocationRelativeTo(null);
+        d.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        d.setVisible(true);    }//GEN-LAST:event_statisticsBtnActionPerformed
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel balanceLbl;
     private javax.swing.JLabel expenditureLbl;
@@ -297,5 +316,6 @@ public class SummaryView extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private java.awt.List list1;
     private javax.swing.JProgressBar progressBar;
+    private javax.swing.JButton statisticsBtn;
     // End of variables declaration//GEN-END:variables
 }
