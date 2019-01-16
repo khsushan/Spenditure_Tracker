@@ -12,6 +12,7 @@ import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
 import com.java.spendituretracker.controller.inf.IncomeControllerInf;
 import com.java.spendituretracker.dto.ExpenditureListDto;
 import com.java.spendituretracker.view.expenditure.AddExpenditureView;
+import com.java.spendituretracker.view.income.AddIncomeView;
 import java.awt.Color;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ public class SummaryView extends javax.swing.JPanel {
 
     private ExpenditureControllerInf expenditureControllerInf;
     private IncomeControllerInf incomeControllerInf;
+    private int month;
 
     /**
      * Creates new form SummaryView
@@ -49,10 +51,8 @@ public class SummaryView extends javax.swing.JPanel {
         this();
         expenditureControllerInf = new ExpenditureController();
         incomeControllerInf = new IncomeController();
-        double expensesTotal = loadExpneditures(month);
-        double incomeTotal = getIncomeByMonth(month);
-        calculateTotal(expensesTotal, incomeTotal);
-        initializeProgressBar(expensesTotal, incomeTotal);
+        this.month = month;
+        calculateTotal(month);
     }
 
     private double loadExpneditures(int month) {
@@ -81,7 +81,10 @@ public class SummaryView extends javax.swing.JPanel {
         return 0;
     }
 
-    private void calculateTotal(double expensesTotal, double incomeTotal) {
+    private void calculateTotal(int month) {
+        double expensesTotal = loadExpneditures(month);
+        double incomeTotal = getIncomeByMonth(month);
+        initializeProgressBar(expensesTotal, incomeTotal);
         expenditureLbl.setText(Formatter.currencyFormat(expensesTotal));
         expenditureLbl.setForeground(Color.red);
         incomeLbl.setText(Formatter.currencyFormat(incomeTotal));
@@ -268,12 +271,15 @@ public class SummaryView extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void incomeBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_incomeBtnActionPerformed
-        // TODO add your handling code here:
+        AddIncomeView addIncomeView = new AddIncomeView(null, true);
+        addIncomeView.setVisible(true);
+        calculateTotal(this.month);
     }//GEN-LAST:event_incomeBtnActionPerformed
 
     private void expensesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_expensesBtnActionPerformed
         AddExpenditureView addExpenditureView = new AddExpenditureView(null, true);
         addExpenditureView.setVisible(true);
+        calculateTotal(this.month);
     }//GEN-LAST:event_expensesBtnActionPerformed
 
 

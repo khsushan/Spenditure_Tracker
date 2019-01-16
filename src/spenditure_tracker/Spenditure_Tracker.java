@@ -5,13 +5,11 @@
  */
 package spenditure_tracker;
 
-import com.java.spendituretracker.dbconnection.DBConnection;
 import com.java.spendituretracker.view.MainView;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
@@ -25,14 +23,18 @@ public class Spenditure_Tracker {
      */
     public static void main(String[] args) {
         try {
-                UIManager.setLookAndFeel(
-            UIManager.getCrossPlatformLookAndFeelClassName());
+            for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Spenditure_Tracker.class.getName()).log(Level.SEVERE, null, ex);
         }
-       java.awt.EventQueue.invokeLater(() -> {
-           new MainView().setVisible(true);
-       });
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainView().setVisible(true);
+        });
     }
-    
+
 }

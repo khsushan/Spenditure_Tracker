@@ -73,4 +73,19 @@ public class Income {
             preparedStatement.close();
         }
     }
+     
+     public int AddIncome() throws SQLException, ClassNotFoundException {
+
+        String query = "INSERT INTO Income(Amount,Date,CategoryId) VALUES(?,?,?)";
+        PreparedStatement preparedStatement = DBConnection.GetConnection().prepareStatement(query);
+        preparedStatement.setDouble(1, this.getAmount());
+        preparedStatement.setDate(2, (java.sql.Date) this.getDate());
+        preparedStatement.setLong(3, this.getCategory().getCategoryId());
+        try {
+            return preparedStatement.executeUpdate();
+        } finally {
+            preparedStatement.close();
+        }
+
+    }
 }
