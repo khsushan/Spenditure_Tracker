@@ -7,10 +7,16 @@ package com.java.spendituretracker.controller;
 
 import com.java.spendituretracker.common.ModelMapperFactory;
 import com.java.spendituretracker.controller.inf.IncomeControllerInf;
+import com.java.spendituretracker.dto.ExpenditureListDto;
 import com.java.spendituretracker.dto.IncomeDto;
+import com.java.spendituretracker.dto.IncomeListDto;
+import com.java.spendituretracker.model.expenditure.Expenditure;
 import com.java.spendituretracker.model.income.Income;
+import java.lang.reflect.Type;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 
 /**
  *
@@ -35,6 +41,13 @@ public class IncomeController implements  IncomeControllerInf{
     public int addIncome(IncomeDto incomeDto) throws SQLException, ClassNotFoundException {
         income = modelMapper.map(incomeDto, Income.class);
         return income.AddIncome();
+    }
+    
+      public ArrayList<IncomeListDto> getIncomeByMonth(int month) throws SQLException, ClassNotFoundException {
+        Type listType = new TypeToken<ArrayList<IncomeListDto>>() {
+        }.getType();        
+         ArrayList<Income> expenditures = income.GetAllIncomeByMonth(month);
+        return modelMapper.map(expenditures, listType);
     }
     
 }

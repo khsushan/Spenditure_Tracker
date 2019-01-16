@@ -6,6 +6,7 @@
 package com.java.spendituretracker.view;
 
 import com.java.spendituretracker.view.category.CategoryView;
+import com.java.spendituretracker.view.income.IncomeView;
 import com.java.spendituretracker.view.summary.SummaryView;
 
 /**
@@ -16,6 +17,7 @@ public class MainView extends javax.swing.JFrame {
 
     private SummaryView summaryView;
         private CategoryView categoryView;
+        private IncomeView incomeView;
 
     /**
      * Creates new form MainView
@@ -24,6 +26,7 @@ public class MainView extends javax.swing.JFrame {
         initComponents();
         LoadSummaryView(1);
         LoadCategoryView();
+        LoadIncomeView(1);
     }
     
     private  void LoadSummaryView(int month){
@@ -38,6 +41,13 @@ public class MainView extends javax.swing.JFrame {
         categoryView.setBounds(0,0,CategoryContainer.getWidth(), CategoryContainer.getHeight());
         this.CategoryContainer.add(categoryView);
     }
+    private  void LoadIncomeView(int month){
+        
+        incomeView = new IncomeView(month);
+        incomeView.setBounds(0,0,jPanelIncomeContainer.getWidth(), jPanelIncomeContainer.getHeight());
+        this.jPanelIncomeContainer.add(incomeView);
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -53,7 +63,9 @@ public class MainView extends javax.swing.JFrame {
         mainSummaryScorllPanel = new javax.swing.JScrollPane();
         mainContainer = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        incomeContainer = new javax.swing.JPanel();
+        incomeMonthNameCmb = new javax.swing.JComboBox<String>();
+        jPanelIncomeContainer = new javax.swing.JPanel();
         CategoryContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,11 +81,11 @@ public class MainView extends javax.swing.JFrame {
         mainContainer.setLayout(mainContainerLayout);
         mainContainerLayout.setHorizontalGroup(
             mainContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 882, Short.MAX_VALUE)
+            .addGap(0, 929, Short.MAX_VALUE)
         );
         mainContainerLayout.setVerticalGroup(
             mainContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 599, Short.MAX_VALUE)
+            .addGap(0, 604, Short.MAX_VALUE)
         );
 
         mainSummaryScorllPanel.setViewportView(mainContainer);
@@ -86,7 +98,7 @@ public class MainView extends javax.swing.JFrame {
                 .addGap(353, 353, 353)
                 .addComponent(monthNameCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(mainSummaryScorllPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 880, Short.MAX_VALUE)
+            .addComponent(mainSummaryScorllPanel, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -103,7 +115,7 @@ public class MainView extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 880, Short.MAX_VALUE)
+            .addGap(0, 931, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,24 +124,55 @@ public class MainView extends javax.swing.JFrame {
 
         jTabbedPane5.addTab("Expenditure", jPanel2);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 880, Short.MAX_VALUE)
+        incomeMonthNameCmb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
+        incomeMonthNameCmb.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                incomeMonthNameCmbItemStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelIncomeContainerLayout = new javax.swing.GroupLayout(jPanelIncomeContainer);
+        jPanelIncomeContainer.setLayout(jPanelIncomeContainerLayout);
+        jPanelIncomeContainerLayout.setHorizontalGroup(
+            jPanelIncomeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 752, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 643, Short.MAX_VALUE)
+        jPanelIncomeContainerLayout.setVerticalGroup(
+            jPanelIncomeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 448, Short.MAX_VALUE)
         );
 
-        jTabbedPane5.addTab("Income", jPanel3);
+        javax.swing.GroupLayout incomeContainerLayout = new javax.swing.GroupLayout(incomeContainer);
+        incomeContainer.setLayout(incomeContainerLayout);
+        incomeContainerLayout.setHorizontalGroup(
+            incomeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(incomeContainerLayout.createSequentialGroup()
+                .addGroup(incomeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(incomeContainerLayout.createSequentialGroup()
+                        .addGap(281, 281, 281)
+                        .addComponent(incomeMonthNameCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(incomeContainerLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanelIncomeContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(169, Short.MAX_VALUE))
+        );
+        incomeContainerLayout.setVerticalGroup(
+            incomeContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(incomeContainerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(incomeMonthNameCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanelIncomeContainer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(153, Short.MAX_VALUE))
+        );
+
+        jTabbedPane5.addTab("Income", incomeContainer);
 
         javax.swing.GroupLayout CategoryContainerLayout = new javax.swing.GroupLayout(CategoryContainer);
         CategoryContainer.setLayout(CategoryContainerLayout);
         CategoryContainerLayout.setHorizontalGroup(
             CategoryContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 880, Short.MAX_VALUE)
+            .addGap(0, 931, Short.MAX_VALUE)
         );
         CategoryContainerLayout.setVerticalGroup(
             CategoryContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -161,12 +204,22 @@ public class MainView extends javax.swing.JFrame {
         LoadSummaryView(monthNameCmb.getSelectedIndex()+1);
     }//GEN-LAST:event_monthNameCmbItemStateChanged
 
+    private void incomeMonthNameCmbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_incomeMonthNameCmbItemStateChanged
+  if(incomeView != null){
+            this.jPanelIncomeContainer.remove(incomeView);
+            this.jPanelIncomeContainer.revalidate();
+            this.jPanelIncomeContainer.repaint();                    
+        }        
+        LoadIncomeView(incomeMonthNameCmb.getSelectedIndex()+1);    }//GEN-LAST:event_incomeMonthNameCmbItemStateChanged
+
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel CategoryContainer;
+    private javax.swing.JPanel incomeContainer;
+    private javax.swing.JComboBox<String> incomeMonthNameCmb;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanelIncomeContainer;
     private javax.swing.JTabbedPane jTabbedPane5;
     private javax.swing.JPanel mainContainer;
     private javax.swing.JScrollPane mainSummaryScorllPanel;

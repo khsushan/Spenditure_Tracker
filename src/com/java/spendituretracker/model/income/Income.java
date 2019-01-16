@@ -7,9 +7,11 @@ package com.java.spendituretracker.model.income;
 
 import com.java.spendituretracker.dbconnection.DBConnection;
 import com.java.spendituretracker.model.category.Category;
+import com.java.spendituretracker.model.expenditure.Expenditure;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -69,6 +71,30 @@ public class Income {
               return result.getDouble("Total");
             }
             return 0;
+        } finally {
+            preparedStatement.close();
+        }
+    }
+     
+     public ArrayList<Income> GetAllIncomeByMonth(int month) throws SQLException, ClassNotFoundException {
+        ArrayList<Income> incomes = new ArrayList<>();
+        String query = "SELECT sum(Amount) as Total, C.CategoryName FROM income as E "
+                + "INNER JOIN category as C ON E.CategoryId = C.CategoryId "
+                + "WHERE MONTH(E.Date) = ? group by C.CategoryName ";
+
+        PreparedStatement preparedStatement = DBConnection.GetConnection().prepareStatement(query);
+        preparedStatement.setInt(1, month);
+        try {
+            ResultSet result = preparedStatement.executeQuery();
+            while (result.next()) {
+                Income income = new Income();
+                income.amount = result.getDouble("Total");
+                income.category = new Category();
+                income.category.setCategoryName(result.getString("CategoryName"));
+                incomes.add(income);
+            }
+            return incomes;
+            
         } finally {
             preparedStatement.close();
         }
