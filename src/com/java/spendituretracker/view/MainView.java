@@ -5,6 +5,7 @@
  */
 package com.java.spendituretracker.view;
 
+import com.java.spendituretracker.view.category.CategoryView;
 import com.java.spendituretracker.view.summary.SummaryView;
 
 /**
@@ -14,13 +15,15 @@ import com.java.spendituretracker.view.summary.SummaryView;
 public class MainView extends javax.swing.JFrame {
 
     private SummaryView summaryView;
-    
+        private CategoryView categoryView;
+
     /**
      * Creates new form MainView
      */
     public MainView() {
         initComponents();
         LoadSummaryView(1);
+        LoadCategoryView();
     }
     
     private  void LoadSummaryView(int month){
@@ -29,7 +32,12 @@ public class MainView extends javax.swing.JFrame {
         summaryView.setBounds(0,0,mainContainer.getWidth(), mainContainer.getHeight());
         this.mainContainer.add(summaryView);
     }
-
+    private  void LoadCategoryView(){
+        
+        categoryView = new CategoryView();
+        categoryView.setBounds(0,0,CategoryContainer.getWidth(), CategoryContainer.getHeight());
+        this.CategoryContainer.add(categoryView);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,15 +49,16 @@ public class MainView extends javax.swing.JFrame {
 
         jTabbedPane5 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
-        monthNameCmb = new javax.swing.JComboBox<>();
+        monthNameCmb = new javax.swing.JComboBox<String>();
         mainSummaryScorllPanel = new javax.swing.JScrollPane();
         mainContainer = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
+        CategoryContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        monthNameCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
+        monthNameCmb.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" }));
         monthNameCmb.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 monthNameCmbItemStateChanged(evt);
@@ -116,6 +125,19 @@ public class MainView extends javax.swing.JFrame {
 
         jTabbedPane5.addTab("Income", jPanel3);
 
+        javax.swing.GroupLayout CategoryContainerLayout = new javax.swing.GroupLayout(CategoryContainer);
+        CategoryContainer.setLayout(CategoryContainerLayout);
+        CategoryContainerLayout.setHorizontalGroup(
+            CategoryContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 880, Short.MAX_VALUE)
+        );
+        CategoryContainerLayout.setVerticalGroup(
+            CategoryContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 643, Short.MAX_VALUE)
+        );
+
+        jTabbedPane5.addTab("Category", CategoryContainer);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -141,6 +163,7 @@ public class MainView extends javax.swing.JFrame {
 
   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel CategoryContainer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

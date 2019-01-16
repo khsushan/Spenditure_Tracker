@@ -65,7 +65,7 @@ public class DisplayStatisticsView extends javax.swing.JFrame {
             return result;
 
         } catch (ClassNotFoundException | SQLException ex) {
-            Logger.getLogger(AddExpenditureView.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DisplayStatisticsView.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }

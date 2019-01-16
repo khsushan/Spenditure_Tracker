@@ -35,5 +35,9 @@ public class CategoryController implements  CategoryControllerInf{
         ArrayList<Category> categories = category.GetAllCategories();
         return modelMapper.map(categories, listType);
     }
-
+   @Override
+    public int addCategory(CategoryDto categoryDto) throws SQLException, ClassNotFoundException {
+        category = modelMapper.map(categoryDto, Category.class);
+        return category.AddCategory();
+    }
 }

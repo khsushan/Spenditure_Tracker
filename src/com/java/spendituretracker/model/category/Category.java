@@ -7,6 +7,7 @@ package com.java.spendituretracker.model.category;
 
 import com.java.spendituretracker.dbconnection.DBConnection;
 import java.awt.List;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -50,5 +51,19 @@ public class Category {
             categories.add(category);
         }        
         return categories;
+    }
+    
+        public int AddCategory() throws SQLException, ClassNotFoundException {
+
+        String query = "INSERT INTO category(CategoryId,CategoryName) VALUES(?,?)";
+        PreparedStatement preparedStatement = DBConnection.GetConnection().prepareStatement(query);
+        preparedStatement.setLong(1, this.getCategoryId());
+        preparedStatement.setString(2, this.getCategoryName());
+        try {
+            return preparedStatement.executeUpdate();
+        } finally {
+            preparedStatement.close();
+        }
+
     }
 }

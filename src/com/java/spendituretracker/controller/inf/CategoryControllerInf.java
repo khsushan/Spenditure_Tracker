@@ -17,4 +17,5 @@ public interface CategoryControllerInf {
 
     ArrayList<CategoryDto> GetAllCategories() throws ClassNotFoundException, SQLException;
 
+    int addCategory(CategoryDto categoryDto) throws SQLException, ClassNotFoundException;
 }

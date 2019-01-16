@@ -2,7 +2,7 @@ CREATE DATABASE  IF NOT EXISTS `spenditure_tracker`;
 USE `spenditure_tracker`;
 
 CREATE TABLE `spenditure_tracker`.`category` (
-  `CategoryId` INT NOT NULL,
+  `CategoryId` INT NOT NULL AUTO_INCREMENT,
   `CategoryName` VARCHAR(45) NULL,
   PRIMARY KEY (`CategoryId`));
   
