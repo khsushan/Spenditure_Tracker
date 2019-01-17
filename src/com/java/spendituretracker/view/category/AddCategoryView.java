@@ -26,6 +26,7 @@ public class AddCategoryView extends javax.swing.JFrame {
     public AddCategoryView() {
         initComponents();
         categoryControllerInf = new CategoryController();
+        this.setTitle("Add New Income");
         setDefaultCloseOperation(HIDE_ON_CLOSE);
 
     }

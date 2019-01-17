@@ -34,6 +34,7 @@ public class AddIncomeView extends javax.swing.JDialog {
     public AddIncomeView(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.setTitle("Add New Income");
         incomeControllerInf = new IncomeController();
         categoryControllerInf =  new CategoryController();
         loadCategories();
