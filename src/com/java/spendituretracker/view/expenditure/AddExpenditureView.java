@@ -12,12 +12,16 @@ import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
 import com.java.spendituretracker.dto.CategoryDto;
 import com.java.spendituretracker.dto.ExpenditureDto;
 import com.java.spendituretracker.view.summary.SummaryView;
+import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -37,6 +41,7 @@ public class AddExpenditureView extends javax.swing.JDialog {
         this.setTitle("Add New Expenditure");
         expenditureControllerInf = new ExpenditureController();
         categoryControllerInf = new CategoryController();
+        numOnly(ammountTxt);
         loadCategories();
 
     }
@@ -129,18 +134,23 @@ public class AddExpenditureView extends javax.swing.JDialog {
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
         ExpenditureDto expenditureDto = new ExpenditureDto();
-        expenditureDto.setCategoryId(((CategoryDto)categoryCmb.getSelectedItem()).getCategoryId());
-        expenditureDto.setAmount(Double.parseDouble(ammountTxt.getText()));
-        expenditureDto.setDate(new java.sql.Date(datePicker.getDate().getTime()));
+        expenditureDto.setCategoryId(((CategoryDto) categoryCmb.getSelectedItem()).getCategoryId());
         try {
-            expenditureControllerInf.addExpenditure(expenditureDto);
-            this.setVisible(false);
-            this.dispose();
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(SummaryView.class.getName()).log(Level.SEVERE, null, ex);
+            expenditureDto.setAmount(Double.parseDouble(ammountTxt.getText()));
+            expenditureDto.setDate(new java.sql.Date(datePicker.getDate().getTime()));
+            try {
+                expenditureControllerInf.addExpenditure(expenditureDto);
+                this.setVisible(false);
+                this.dispose();
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(SummaryView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (java.lang.NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter amount", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_saveBtnActionPerformed
 
+
+    }//GEN-LAST:event_saveBtnActionPerformed
 
     private void loadCategories() {
         try {
@@ -150,6 +160,28 @@ public class AddExpenditureView extends javax.swing.JDialog {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(AddExpenditureView.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void numOnly(Object objSource) {
+        ((Component) objSource).addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                String filterStr = "0123456789.";
+                char c = (char) e.getKeyChar();
+                if (filterStr.indexOf(c) < 0) {
+                    e.consume();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

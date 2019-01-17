@@ -12,22 +12,28 @@ import com.java.spendituretracker.controller.inf.IncomeControllerInf;
 import com.java.spendituretracker.dto.CategoryDto;
 import com.java.spendituretracker.dto.IncomeDto;
 import com.java.spendituretracker.view.expenditure.AddExpenditureView;
+import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.SQLException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Calcey
  */
 public class AddIncomeView extends javax.swing.JDialog {
-    
+
     private IncomeControllerInf incomeControllerInf;
     private CategoryControllerInf categoryControllerInf;
+
     /**
      * Creates new form AddIncomeView
+     *
      * @param parent
      * @param modal
      */
@@ -36,11 +42,11 @@ public class AddIncomeView extends javax.swing.JDialog {
         initComponents();
         this.setTitle("Add New Income");
         incomeControllerInf = new IncomeController();
-        categoryControllerInf =  new CategoryController();
+        categoryControllerInf = new CategoryController();
+        numOnly(ammountTxt);
         loadCategories();
     }
-    
-    
+
     private void loadCategories() {
         try {
             Vector<CategoryDto> list = new Vector<>(categoryControllerInf.GetAllCategories());
@@ -49,6 +55,28 @@ public class AddIncomeView extends javax.swing.JDialog {
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(AddExpenditureView.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void numOnly(Object objSource) {
+        ((Component) objSource).addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                String filterStr = "0123456789.";
+                char c = (char) e.getKeyChar();
+                if (filterStr.indexOf(c) < 0) {
+                    e.consume();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+        });
     }
 
     /**
@@ -139,19 +167,23 @@ public class AddIncomeView extends javax.swing.JDialog {
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
         IncomeDto incomeDto = new IncomeDto();
-        incomeDto.setCategoryId(((CategoryDto)categoryCmb.getSelectedItem()).getCategoryId());
-        incomeDto.setAmount(Double.parseDouble(ammountTxt.getText()));
-        incomeDto.setDate(new java.sql.Date(datePicker.getDate().getTime()));
+
         try {
-            incomeControllerInf.addIncome(incomeDto);
-            this.setVisible(false);
-            this.dispose();
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(AddIncomeView.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                incomeDto.setCategoryId(((CategoryDto) categoryCmb.getSelectedItem()).getCategoryId());
+                incomeDto.setAmount(Double.parseDouble(ammountTxt.getText()));
+                incomeDto.setDate(new java.sql.Date(datePicker.getDate().getTime()));
+                incomeControllerInf.addIncome(incomeDto);
+                this.setVisible(false);
+                this.dispose();
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(AddIncomeView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (java.lang.NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter amount", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_saveBtnActionPerformed
 
-  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField ammountTxt;
