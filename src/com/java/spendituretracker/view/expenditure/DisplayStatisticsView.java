@@ -7,7 +7,6 @@ package com.java.spendituretracker.view.expenditure;
 
 import com.java.spendituretracker.controller.CategoryController;
 import com.java.spendituretracker.controller.ExpenditureController;
-import com.java.spendituretracker.controller.IncomeController;
 import com.java.spendituretracker.controller.inf.CategoryControllerInf;
 import com.java.spendituretracker.controller.inf.ExpenditureControllerInf;
 import com.java.spendituretracker.dto.ExpenditureListDto;
